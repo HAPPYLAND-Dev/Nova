@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.world.ChunkUnloadEvent
+import us.lynuxcraft.deadsilenceiv.advancedchests.AdvancedChestsAPI
 import xyz.xenondevs.nova.LOGGER
 import xyz.xenondevs.nova.NOVA
 import xyz.xenondevs.nova.data.config.PermanentStorage
@@ -439,7 +440,7 @@ private class NetworkManagerImpl : NetworkManager {
     override fun addEndPoint(endPoint: NetworkEndPoint, updateBridges: Boolean): CompletableFuture<Void> {
         // add endPoint to nodesById
         nodesById[endPoint.uuid] = endPoint
-        
+
         return NetworkTypeRegistry.types.mapToAllFuture networks@{ networkType ->
             val allowedFaces = endPoint.allowedFaces[networkType]
             if (allowedFaces != null) { // does the endpoint want to have any connections?
@@ -449,7 +450,10 @@ private class NetworkManagerImpl : NetworkManager {
                     if (!allowedFaces.contains(face)) return@endPoints null
                     // do not allow networks between two vanilla tile entities
                     if (endPoint is VanillaTileEntity && neighborNode is VanillaTileEntity) return@endPoints null
-                    
+
+                    val chests = AdvancedChestsAPI.getChestManager().getAdvancedChest(endPoint.location);
+                    if (chests != null) return@endPoints null
+
                     return@endPoints hasAccessPermission(endPoint, neighborNode).thenRunPartialTask(endPoint) {
                         connectEndPoint(endPoint, neighborNode, networkType, face, updateBridges)
                     }

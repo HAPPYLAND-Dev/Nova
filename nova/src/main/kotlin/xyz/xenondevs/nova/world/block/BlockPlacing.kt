@@ -1,6 +1,7 @@
 package xyz.xenondevs.nova.world.block
 
 import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.event.EventHandler
@@ -116,7 +117,7 @@ internal object BlockPlacing : Listener {
                 if (player.gameMode == GameMode.SURVIVAL) handItem.amount--
                 runTask { player.swingHand(event.hand!!) }
             } else {
-                player.spigot().sendMessage(localized(ChatColor.RED, result.message))
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, localized(ChatColor.RED, result.message))
             }
         }
     }

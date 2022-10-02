@@ -18,6 +18,7 @@ softdepend:
   - ItemsAdder
   - Oraxen
   - MMOItems
+  - AdvancedChests
   - AuthMe
 
 permissions:

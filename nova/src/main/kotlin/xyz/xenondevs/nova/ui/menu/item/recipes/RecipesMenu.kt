@@ -17,6 +17,7 @@ import de.studiocode.invui.item.impl.controlitem.TabItem
 import de.studiocode.invui.window.Window
 import de.studiocode.invui.window.impl.single.SimpleWindow
 import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TranslatableComponent
@@ -46,7 +47,7 @@ fun Player.showRecipes(id: String): Boolean {
         return true
     } else if (info != null) {
         closeInventory()
-        spigot().sendMessage(TranslatableComponent(info))
+        spigot().sendMessage(ChatMessageType.ACTION_BAR, TranslatableComponent(info))
         return true
     }
     return false
@@ -62,7 +63,7 @@ fun Player.showUsages(id: String): Boolean {
         return true
     } else if (info != null) {
         closeInventory()
-        spigot().sendMessage(TranslatableComponent(info))
+        spigot().sendMessage(ChatMessageType.ACTION_BAR, TranslatableComponent(info))
         return true
     }
     return false
@@ -173,7 +174,7 @@ private class RecipesWindow(player: Player, recipes: Map<RecipeGroup, Iterable<R
         
         override fun handleClick(clickType: ClickType, player: Player, event: InventoryClickEvent) {
             player.closeInventory()
-            player.spigot().sendMessage(TranslatableComponent(info))
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TranslatableComponent(info))
         }
         
     }

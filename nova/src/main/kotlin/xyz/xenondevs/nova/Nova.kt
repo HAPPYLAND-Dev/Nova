@@ -55,6 +55,7 @@ class Nova(internal val loader: JavaPlugin, val pluginFile: File) : Plugin by lo
     val lastVersion = PermanentStorage.retrieveOrNull<Version>("last_version")?.let { if (it == Version("0.1")) Version("0.10") else it }
     val isVersionChange = lastVersion != null && lastVersion != version
     val isDevServer = IS_DEV_SERVER
+    val prefix = "§8[§x§8§1§D§4§F§A科技§8] "
     
     override val blockManager: IBlockManager = BlockManager
     override val tileEntityManager: ITileEntityManager = TileEntityManager

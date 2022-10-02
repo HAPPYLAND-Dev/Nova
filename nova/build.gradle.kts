@@ -51,6 +51,7 @@ dependencies {
     compileOnly("dev.espi:protectionstones:2.10.2") { isTransitive = false }
     compileOnly("org.maxgamer:QuickShop:5.1.0.7") { isTransitive = false }
     compileOnly("com.bekvon:Residence:5.0.1.6") { isTransitive = false }
+    compileOnly("com.github.DeadSilenceIV:AdvancedChestsAPI:2.9-BETA") { isTransitive = false }
     
     // test dependencies
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
