@@ -1,6 +1,7 @@
 package xyz.xenondevs.nova
 
 import net.md_5.bungee.api.ChatColor
+import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.BaseComponent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.HandlerList
@@ -108,7 +109,7 @@ internal object UpdateReminder : Initializable(), Listener {
     private fun handleJoin(event: PlayerJoinEvent) {
         val player = event.player
         if (player.hasPermission("nova.misc.updateReminder") && needsUpdate.isNotEmpty()) {
-            needsUpdate.forEach { player.spigot().sendMessage(getOutdatedMessage(it)) }
+            needsUpdate.forEach { player.spigot().sendMessage(ChatMessageType.ACTION_BAR, getOutdatedMessage(it)) }
         }
     }
     
