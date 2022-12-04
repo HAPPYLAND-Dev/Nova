@@ -25,9 +25,10 @@ import xyz.xenondevs.nova.util.data.write
 import xyz.xenondevs.resourcepackobfuscator.ResourcePackObfuscator
 import java.io.File
 
+private val BOSS_BAR_ENABLED = { BossBarOverlayManager.isEnabled }
 private val CORE_RESOURCE_FILTER = resourceFilterOf(
-    "assets/minecraft/textures/gui/bars.png" to { BossBarOverlayManager.isEnabled },
-    "assets/nova/font/bossbar/*" to { !BossBarOverlayManager.isEnabled },
+    "assets/minecraft/textures/gui/bars.png" to BOSS_BAR_ENABLED,
+    "assets/nova/font/bossbar/*" to BOSS_BAR_ENABLED,
 )
 private val CONFIG_RESOURCE_FILTER by configReloadable { resourceFilterOf(*DEFAULT_CONFIG.getStringList("resource_pack.content_filters").toTypedArray()) }
 
