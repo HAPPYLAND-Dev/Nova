@@ -61,10 +61,14 @@ internal class RegionFile(val world: World, val file: File, val regionX: Int, va
             backupFile.delete()
         }
     }
-    
+
     fun init() {
-        if (file.length() != 0L) {
-            readFile(DataInputStream(file.inputStream()))
+        try {
+            if (file.length() != 0L) {
+                readFile(DataInputStream(file.inputStream()))
+            }
+        } catch (e:Exception) {
+            throw IllegalStateException("Failed to read region file ${file.absolutePath}", e)
         }
     }
     
