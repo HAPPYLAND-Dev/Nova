@@ -1,11 +1,12 @@
 group = "xyz.xenondevs.nova"
 
-val mojangMapped = System.getProperty("mojang-mapped") != null
+val mojangMapped = project.hasProperty("mojang-mapped") || System.getProperty("mojang-mapped") != null
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     java
     kotlin("jvm") version libs.versions.kotlin
+    id("org.jetbrains.dokka") version "1.7.20"
     id("xyz.xenondevs.jar-loader-gradle-plugin")
     id("xyz.xenondevs.specialsource-gradle-plugin") version "1.0.0"
     id("xyz.xenondevs.string-remapper-gradle-plugin") version "1.0.0"
@@ -17,11 +18,11 @@ dependencies {
     api(project(":nova-api"))
     spigotLoaderApi(libs.bundles.kotlin)
     novaLoaderApi(libs.bundles.cbf)
-    novaLoaderApi("de.studiocode.invui:InvUI:0.8.2") { for (i in 1..11) exclude("de.studiocode.invui", "IA-R$i") }
-    novaLoaderApi("de.studiocode.invui:ResourcePack:0.8.1") { exclude("de.studiocode.invui", "InvUI") }
-    novaLoaderApi("de.studiocode.invui:IA-R11:0.8.1:remapped-mojang")
-    novaLoaderApi("xyz.xenondevs:nms-utilities:0.4:remapped-mojang")
-    novaLoaderApi("xyz.xenondevs:particle:1.8")
+    novaLoaderApi("de.studiocode.invui:InvUI:0.9") { for (i in 1..12) exclude("de.studiocode.invui", "IA-R$i") }
+    novaLoaderApi("de.studiocode.invui:ResourcePack:0.9") { exclude("de.studiocode.invui", "InvUI") }
+    novaLoaderApi("de.studiocode.invui:IA-R12:0.9:remapped-mojang")
+    novaLoaderApi("xyz.xenondevs:nms-utilities:0.5:remapped-mojang")
+    novaLoaderApi("xyz.xenondevs:particle:1.8.3")
     
     // internal dependencies
     compileOnly(project(":nova-loader"))
@@ -31,7 +32,7 @@ dependencies {
     novaLoader("xyz.xenondevs.bstats:bstats-bukkit:3.0.1")
     novaLoader("xyz.xenondevs.bytebase:ByteBase-Runtime:0.4.2")
     novaLoader("me.xdrop:fuzzywuzzy:1.4.0")
-    novaLoader("software.amazon.awssdk:s3:2.18.21")
+    novaLoader("software.amazon.awssdk:s3:2.18.24")
     
     // spigot runtime dependencies
     spigotRuntime(libs.bundles.maven.resolver)

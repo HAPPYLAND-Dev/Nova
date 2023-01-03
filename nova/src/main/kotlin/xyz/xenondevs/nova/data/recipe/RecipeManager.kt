@@ -6,6 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Keyed
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.Tag
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -60,6 +61,14 @@ class ModelDataTest(private val type: Material, private val data: IntArray, over
     
     override fun test(item: ItemStack): Boolean {
         return item.type == type && item.customModelData in data
+    }
+    
+}
+
+class TagTest(private val tag: Tag<Material>, override val examples: List<ItemStack> = tag.values.map(::ItemStack)) : MultiItemTest {
+    
+    override fun test(item: ItemStack): Boolean {
+        return tag.isTagged(item.type) && item.customModelData == 0
     }
     
 }
@@ -274,13 +283,15 @@ object RecipeManager : Initializable(), Listener {
         val inventory = player.inventory
         if (inventory.containsAll(recipe.requiredChoices)) {
             // fill inventory
-            for (slot in 0 until 9) {
-                val choice = recipe.choiceMatrix[slot] ?: continue
-                
-                val item = inventory.takeFirstOccurrence(choice)
-                if (item != null) {
-                    // Crafting inventory starts at index 1
-                    craftingInventory.setItem(slot + 1, item)
+            for (x in 0 until recipe.width) {
+                for (y in 0 until recipe.height) {
+                    val choice = recipe.getChoice(x, y) ?: continue
+                    
+                    val item = inventory.takeFirstOccurrence(choice)
+                    if (item != null) {
+                        // Crafting inventory starts at index 1
+                        craftingInventory.setItem(x + y * 3 + 1, item)
+                    }
                 }
             }
             
@@ -325,15 +336,22 @@ object RecipeManager : Initializable(), Listener {
  */
 internal class OptimizedShapedRecipe(val recipe: ShapedRecipe) {
     
+    val width = recipe.shape[0].length
+    val height = recipe.shape.size
     val requiredChoices: List<RecipeChoice>
-    val choiceMatrix: Array<RecipeChoice?>
-    val key: String
+    val flatChoices: Array<RecipeChoice?>
+    val choiceMatrix: Array<Array<RecipeChoice?>>
+    val key: String = recipe.key.toString()
     
     init {
         val flatShape = recipe.shape.joinToString("")
-        choiceMatrix = Array(9) { recipe.choiceMap[flatShape[it]] }
-        requiredChoices = flatShape.mapNotNull { recipe.choiceMap[it] }
-        key = (recipe as Keyed).key.toString()
+        flatChoices = Array(flatShape.length) { recipe.choiceMap[flatShape[it]] }
+        requiredChoices = recipe.shape.joinToString("").mapNotNull { recipe.choiceMap[it] }
+        choiceMatrix = Array(width) { x -> Array(height) { y -> recipe.choiceMap[recipe.shape[y][x]] } }
+    }
+    
+    fun getChoice(x: Int, y: Int): RecipeChoice? {
+        return choiceMatrix.getOrNull(x)?.getOrNull(y)
     }
     
 }
